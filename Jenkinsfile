@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        DOCKER_HUB_USER = 'seynabou02'
+        DOCKER_HUB_USER = 'mhd0'
         FRONT_IMAGE = 'react-frontend'
         BACKEND_IMAGE = 'express-backend'
     }
@@ -29,7 +29,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Seynabou26/full_stack_app.git'
+                git branch: 'main', url: 'https://github.com/mhdgeek/full_stack_app.git'
             }
         }
 
@@ -112,7 +112,7 @@ pipeline {
 
         stage('Push Docker Images') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDENTIALS', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub_credentiels', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
                         echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
                         docker push $DOCKER_USER/$FRONT_IMAGE:latest
