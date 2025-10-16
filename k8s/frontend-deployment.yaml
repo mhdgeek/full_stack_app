@@ -18,7 +18,7 @@ spec:
       - name: frontend
         image: mhd0/express-mongo-react-frontend:latest
         ports:
-        - containerPort: 3000
+        - containerPort: 5173
         env:
         - name: REACT_APP_API_URL
           value: "http://backend-service:5000"
@@ -29,16 +29,3 @@ spec:
           limits:
             memory: "256Mi"
             cpu: "200m"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: frontend-service
-spec:
-  selector:
-    app: frontend
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000
-  type: LoadBalancer
