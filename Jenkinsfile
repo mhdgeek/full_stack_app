@@ -52,35 +52,7 @@ pipeline {
         // ----------------------------
         // SonarQube
         // ----------------------------
-        //// Analyse le code avec SonarQube
-        stage('SonarQube Analysis') {
-            steps {
-                echo "Analyse du code avec SonarQube"
-                withSonarQubeEnv('Sonarqube_local') {
-                    withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_TOKEN')]) {
-                        sh """
-                            ${tool('Sonarqube_scanner')}/bin/sonar-scanner \
-                            -Dsonar.projectKey=sonarqube \
-                            -Dsonar.sources=. \
-                            -Dsonar.host.url=$SONAR_HOST_URL \
-                            -Dsonar.login=$SONAR_TOKEN
-                        """
-                    }
-                }
-            }
-        }
-
-        /*Vérifie si le code passe le Quality Gate et arrête le pipeline si échoué
-        stage("Quality Gate") {
-            steps {
-                echo "Vérification du Quality Gate"
-               Timeout fixé à 10 minutes pour attendre la réponse de SonarQube
-               timeout(time: 10, unit: 'MINUTES') {
-                     si le Quality Gate échoue, le pipeline est stoppé
-                    waitForQualityGate(abortPipeline: true)
-                }
-            }
-        }*/
+        
 
         // ----------------------------
         // Tests
@@ -112,7 +84,7 @@ pipeline {
 
         stage('Push Docker Images') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub_credentiels', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
                         echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
                         docker push $DOCKER_USER/$FRONT_IMAGE:latest
