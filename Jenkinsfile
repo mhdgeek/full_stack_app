@@ -34,3 +34,4 @@ pipeline {
                     url: 'https://github.com/mhdgeek/express_mongo_react.git'
             }
         }
+    }
